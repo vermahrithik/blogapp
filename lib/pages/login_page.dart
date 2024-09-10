@@ -32,28 +32,52 @@ class _LoginPageState extends State<LoginPage> {
       },);
   }
 
-  Future<UserCredential?> signInWithGoogle() async{
-    try{
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  // Future<UserCredential?> signInWithGoogle() async{
+  //   try{
+  //     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  //
+  //     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  //
+  //     final credential = GoogleAuthProvider.credential(
+  //         accessToken: googleAuth?.accessToken,
+  //         idToken: googleAuth?.idToken
+  //     );
+  //
+  //     return await FirebaseAuth.instance.signInWithCredential(credential);
+  //
+  //   }on FirebaseAuthException catch (e){
+  //     // final ex = TExceptions.fromCode(e.code);
+  //     final ex = TlsException(e.code);
+  //     throw ex.message;
+  //   }catch (_){
+  //     const ex = TlsException();
+  //     throw ex.message;
+  //   }
+  // }
 
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+  Future<UserCredential?> signInWithGoogle() async {
+    final _googleSignIn = GoogleSignIn();
+    await _googleSignIn.disconnect().catchError((e, stack) {
+      print(e);
+    });
 
-      final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth?.accessToken,
-          idToken: googleAuth?.idToken
-      );
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+    // handling the exception when cancel sign in
+    if (googleUser == null) return null;
 
-    }on FirebaseAuthException catch (e){
-      // final ex = TExceptions.fromCode(e.code);
-      final ex = TlsException(e.code);
-      throw ex.message;
-    }catch (_){
-      const ex = TlsException();
-      throw ex.message;
-    }
+    // Obtaining the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+    await googleUser.authentication;
+
+    // Creating a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
+
 
   @override
   void dispose() {
@@ -367,30 +391,31 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                       ),
                       GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => const SignUpPage()));
-                          },
-                          child: const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'New to Logistics ?',
-                                style: TextStyle(
-                                    color: Color(0xfff2f2f3),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                width: 6,
-                              ),
-                              Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    color: Color(0xfff2f2f3),
-                                    fontWeight: FontWeight.w800),
-                              ),
-                            ],
-                          )),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const SignUpPage()));
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'New to Logistics ?',
+                              style: TextStyle(
+                                  color: Color(0xfff2f2f3),
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                  color: Color(0xfff2f2f3),
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ],
+                        )
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
