@@ -1,3 +1,4 @@
+import 'package:blogapp/pages/add_blog_page.dart';
 import 'package:blogapp/pages/error_page.dart';
 import 'package:blogapp/pages/home_page.dart';
 import 'package:blogapp/pages/login_page.dart';
@@ -64,6 +65,14 @@ class MyAppRouter{
           debugPrint('config page : HomePage');
           return const MaterialPage(child: HomePage()); },
       ),
+      GoRoute(
+        name: MyAppRouteConstants.addBlogRouteName,
+        path: '/addblog',
+        // builder: (context,state){ return Home();},
+        pageBuilder: (context,state){
+          debugPrint('config page : AddBlogPage');
+          return const MaterialPage(child: AddBlogPage(),); },
+      ),
     ],
   );
 
@@ -121,6 +130,14 @@ class MyAppRouter{
           pageBuilder: (context,state){
             debugPrint('config page : HomePage');
             return const MaterialPage(child: HomePage()); },
+        ),
+        GoRoute(
+          name: MyAppRouteConstants.addBlogRouteName,
+          path: '/addblog',
+          // builder: (context,state){ return Home();},
+          pageBuilder: (context,state){
+            debugPrint('config page : AddBlogPage');
+            return const MaterialPage(child: AddBlogPage(),); },
         ),
       ],
     );

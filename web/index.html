@@ -21,6 +21,16 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    function initGapi() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init({
+          client_id: '570150660672-21kk3tgtb8iqi6cfdk18j968u6ple28d.apps.googleusercontent.com'
+        });
+      });
+    }
+    initGapi();
+  </script>
   <script type="module">
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
@@ -36,6 +46,7 @@
 
     const app = initializeApp(firebaseConfig);
   </script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

@@ -1,38 +1,38 @@
 
 class MovieModel {
-  String? movieName;
-  String? movieOverview;
-  String? movieReleaseDate;
-  double? moviePopularity;
-  String? moviePoster;
-  int? movieId;
+  String? blogName;
+  String? blogOverview;
+  String? blogReleaseDate;
+  double? blogPopularity;
+  String? blogPoster;
+  int? blogId;
 
   MovieModel({
-    required this.movieName,
-    required this.movieOverview,
-    required this.movieReleaseDate,
-    required this.moviePopularity,
-    required this.moviePoster,
-    this.movieId,
+    required this.blogName,
+    required this.blogOverview,
+    required this.blogReleaseDate,
+    required this.blogPopularity,
+    required this.blogPoster,
+    this.blogId,
   });
 
   MovieModel.fromJson(Map<String, dynamic> json) {
-    movieName = json['title'];
-    movieOverview = json['overview'];
-    movieReleaseDate = json['release_date'];
-    moviePopularity = json['popularity'];
-    moviePoster = json['poster_path'];
-    movieId = json['id'];
+    blogName = json['blogName'];
+    blogOverview = json['overview'];
+    blogReleaseDate = json['release_date'];
+    blogPopularity = json['popularity'];
+    blogPoster = json['poster_path'];
+    blogId = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['title'] = this.movieName;
-    data['overview'] = this.movieOverview;
-    data['release_date'] = this.movieReleaseDate;
-    data['popularity'] = this.moviePopularity as double;
-    data['poster_path'] = this.moviePoster;
-    data['id'] = this.movieId as int;
+    data['blogName'] = this.blogName;
+    data['overview'] = this.blogOverview;
+    data['release_date'] = this.blogReleaseDate;
+    data['popularity'] = this.blogPopularity as double;
+    data['poster_path'] = this.blogPoster;
+    data['id'] = this.blogId as int;
     return data;
   }
 }
