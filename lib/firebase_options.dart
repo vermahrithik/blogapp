@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '570150660672',
     projectId: 'blogapp-9a39e',
     storageBucket: 'blogapp-9a39e.appspot.com',
+    androidClientId: '570150660672-pgnsos0rd3307fglgdlnal4r85jgof2l.apps.googleusercontent.com',
+    iosClientId: '570150660672-r09qe97v623bfkhu655999816l6b0245.apps.googleusercontent.com',
     iosBundleId: 'com.example.blogapp',
   );
 
@@ -72,6 +74,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '570150660672',
     projectId: 'blogapp-9a39e',
     storageBucket: 'blogapp-9a39e.appspot.com',
+    androidClientId: '570150660672-pgnsos0rd3307fglgdlnal4r85jgof2l.apps.googleusercontent.com',
+    iosClientId: '570150660672-r09qe97v623bfkhu655999816l6b0245.apps.googleusercontent.com',
     iosBundleId: 'com.example.blogapp',
   );
 
@@ -83,4 +87,5 @@ class DefaultFirebaseOptions {
     authDomain: 'blogapp-9a39e.firebaseapp.com',
     storageBucket: 'blogapp-9a39e.appspot.com',
   );
+
 }
