@@ -20,6 +20,7 @@ void main() async {
   // Get.put(MovieController());
   debugPrint('blogController : ok');
   GoRouter router= MyAppRouter.router;
+  navigatorKey.currentContext;    //----------saving using context
   debugPrint('GoRouter router= MyAppRouter.router; : ok');
   runApp(MyApp(routerr:router));
   debugPrint('GoRouter router= MyAppRouter.router; : ok');

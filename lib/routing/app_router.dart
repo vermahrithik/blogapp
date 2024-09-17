@@ -1,4 +1,5 @@
 import 'package:blogapp/pages/add_blog_page.dart';
+import 'package:blogapp/pages/editable_page.dart';
 import 'package:blogapp/pages/error_page.dart';
 import 'package:blogapp/pages/home_page.dart';
 import 'package:blogapp/pages/login_page.dart';
@@ -9,9 +10,13 @@ import 'package:blogapp/routing/app_route_constants.dart';
 import 'package:blogapp/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 class MyAppRouter{
+
   static final GoRouter router = GoRouter(
     initialLocation: '/',
+    navigatorKey: navigatorKey,
     redirect: (context, state) async {
       debugPrint("Path  :${state.uri}");
       SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -72,6 +77,17 @@ class MyAppRouter{
         pageBuilder: (context,state){
           debugPrint('config page : AddBlogPage');
           return const MaterialPage(child: AddBlogPage(),); },
+      ),
+      GoRoute(
+        name: MyAppRouteConstants.editBlogRouteName,
+        path: '/edit',
+        // builder: (context,state){ return Home();},
+        pageBuilder: (context,state){
+          debugPrint('config page : EditBlogPage');
+          final indexxx = state.pathParameters['indexx']??"error";
+          return MaterialPage(child: EditBlogPage(indexxx: indexxx,),
+          );
+        },
       ),
     ],
   );

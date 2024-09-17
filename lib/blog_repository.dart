@@ -4,8 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart';
+
+enum Status {success, loading, failed, networkError}
 
 class BlogRepository extends GetxController {
   static BlogRepository get instance => Get.find();
@@ -37,19 +40,41 @@ class BlogRepository extends GetxController {
   final firebaseStorage = FirebaseStorage.instance;
 
   final imgUrls ="".obs;
-
   final isLoading = false.obs;
   final isUploading = false.obs;
+  final dataList = <BlogModel>[].obs;
+  // late final ctxr = Rx<BuildContext?>(null).obs;
+  late BlogModel blogg = BlogModel(title: '', description: '', blogger: '', date: '', imageUrl: '');
+  late String indexx = "".obs as String;
+  // Uri uri = .obs;
+  // Uint8List bytes = Uint8List(0).obs as Uint8List;
 
-  Future<void> fetchImages() async {
-    isLoading.value = true;
-    final ListResult result =
-        await firebaseStorage.ref('uploaded_images/').listAll();
-    final url =
-        await Future.wait(result.items.map((ref) => ref.getDownloadURL()));
-    imgUrls.value = url[0];
-    isLoading.value = false;
+  Future<void> fetchData() async {
+    try{
+      final snapshot = await _db.collection('blogs',).get();
+      if(snapshot.docs.isNotEmpty){
+        List<BlogModel> blogs = snapshot.docs.map((doc) {
+          return BlogModel.fromJson(doc.data());
+        }).toList();
+        dataList.value = blogs;
+        print('Blogs fetched successfully');
+      }else{
+        debugPrint('connect again when network is available!!');
+      }
+
+    } on FirebaseException catch (e) {
+      if (e.code == 'unavailable') {
+        print('Error: Firebase service is unavailable.');
+      } else if (e.code == 'permission-denied') {
+        print('Error: Permission denied.');
+      } else {
+        print('Error: ${e.message}');
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
+
   /// download particular image , link :
   /// https://firebasestorage.googleapis.com/v0/b/blogapp-9a39e.appspot.com/o/uploaded_images%2F2024-09-12T14%3A45%3A20.628.jpg?alt=media&token=77590917-8f30-488e-89d6-9fa540e11cb5
 
@@ -115,6 +140,8 @@ class BlogRepository extends GetxController {
         imgUrls.value = downloadUrl;
         debugPrint('uploaded from else{}');
       }
+      // uri = Uri.parse('${imgUrls}');
+      // bytes = Uint8List(uri as int);
     } catch (e) {
       print("Error uploading..$e");
     } finally {
