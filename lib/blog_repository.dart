@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 
 enum Status {success, loading, failed, networkError}
 
-class BlogRepository extends GetxController {
+class BlogRepository extends GetxController { //Todo : Make the name with Controller in it
   static BlogRepository get instance => Get.find();
 
   final _db = FirebaseFirestore.instance;
@@ -44,8 +44,14 @@ class BlogRepository extends GetxController {
   final isUploading = false.obs;
   final dataList = <BlogModel>[].obs;
   // late final ctxr = Rx<BuildContext?>(null).obs;
-  late BlogModel blogg = BlogModel(title: '', description: '', blogger: '', date: '', imageUrl: '');
-  late String indexx = "".obs as String;
+  BlogModel blogg = BlogModel();
+
+  set setBlogData(BlogModel data){
+    blogg = data;
+    update();
+  }
+
+  // final indexx = "".obs;
   // Uri uri = .obs;
   // Uint8List bytes = Uint8List(0).obs as Uint8List;
 
@@ -54,14 +60,16 @@ class BlogRepository extends GetxController {
       final snapshot = await _db.collection('blogs',).get();
       if(snapshot.docs.isNotEmpty){
         List<BlogModel> blogs = snapshot.docs.map((doc) {
-          return BlogModel.fromJson(doc.data());
+          BlogModel blog = BlogModel.fromJson(doc.data());
+          blog.id = doc.id;
+          return blog;
         }).toList();
         dataList.value = blogs;
         print('Blogs fetched successfully');
+        debugPrint('${snapshot.docs.map((e)=>e)}');
       }else{
         debugPrint('connect again when network is available!!');
       }
-
     } on FirebaseException catch (e) {
       if (e.code == 'unavailable') {
         print('Error: Firebase service is unavailable.');
@@ -74,6 +82,49 @@ class BlogRepository extends GetxController {
       print('Error fetching data: $e');
     }
   }
+
+  Future<bool> fetchParticularDocData(String id) async {
+    try{
+      final snapshot = await _db.collection('blogs').doc(id).get();
+      debugPrint("Snap Data  :: ${snapshot.data()}");
+      debugPrint("${snapshot.data()}");
+      /// -------------------------------------------------------------------
+      if(snapshot.data()!=null){
+        // blogg = ;
+        setBlogData = BlogModel.fromJson(snapshot.data()!);
+        blogg.id= snapshot.id;
+        debugPrint('${blogg.toJson()}');
+        // debugPrint('${blogg.id}');
+        // if(pDoc.){
+        //   return pDoc;
+        // }else{
+        //   debugPrint('connect again when network is available!!');
+        //   return BlogModel();
+        // }
+        return true;
+      }else{
+        debugPrint('doc id not found');
+        return false;
+      }
+
+    } on FirebaseException catch (e) {
+      if (e.code == 'unavailable') {
+        print('Error: Firebase service is unavailable.');
+        return false;
+      } else if (e.code == 'permission-denied') {
+        print('Error: Permission denied.');
+        return false;
+      } else {
+        print('Error: ${e.message}');
+        return false;
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+      return false;
+    }
+  }
+
+
 
   /// download particular image , link :
   /// https://firebasestorage.googleapis.com/v0/b/blogapp-9a39e.appspot.com/o/uploaded_images%2F2024-09-12T14%3A45%3A20.628.jpg?alt=media&token=77590917-8f30-488e-89d6-9fa540e11cb5

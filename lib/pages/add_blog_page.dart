@@ -339,7 +339,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                         // textAlign: TextAlign.start,
                         textAlignVertical: TextAlignVertical.center,
                         style: const TextStyle(color: Colors.orange),
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'alex parker',
                             contentPadding: EdgeInsets.symmetric(

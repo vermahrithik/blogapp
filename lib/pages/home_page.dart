@@ -77,8 +77,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
           child: SizedBox(
-        // width: deviceWidth,
-        // height: deviceHeight/2,
         child: RefreshIndicator(
             onRefresh: _refresh,
             child: Obx(
@@ -101,15 +99,17 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (BuildContext context, index) {
                           return InkWell(
                             onTap: () {
+                              // // debugPrint("${blogController.dataList[index].id}");
+                              // // blogController.blogg =
+                              // // blogController.dataList[index];
+                              // // blogController.indexx = index.toString();
+                              // blogController.fetchParticularDocData("${blogController.dataList[index].id}");
                               context.goNamed(
-                                  MyAppRouteConstants.editBlogRouteName);
-                              blogController.blogg =
-                              blogController.dataList[index];
-                              blogController.indexx = index.toString();
+                                  MyAppRouteConstants.editBlogRouteName,pathParameters: {'id':'${blogController.dataList[index].id}'});
                             },
                             onLongPress: () {
                               debugPrint(
-                                  '${blogController.dataList[index].date}');
+                                  '${blogController.dataList[index].id}');
                             },
                             child:
                             Stack(alignment: Alignment.center, children: [

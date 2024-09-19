@@ -80,12 +80,12 @@ class MyAppRouter{
       ),
       GoRoute(
         name: MyAppRouteConstants.editBlogRouteName,
-        path: '/edit',
+        path: '/edit/:id',
         // builder: (context,state){ return Home();},
         pageBuilder: (context,state){
           debugPrint('config page : EditBlogPage');
-          final indexxx = state.pathParameters['indexx']??"error";
-          return MaterialPage(child: EditBlogPage(indexxx: indexxx,),
+          final id = state.pathParameters['id']??"0";
+          return MaterialPage(child: EditBlogPage(id),
           );
         },
       ),

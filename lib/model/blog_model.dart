@@ -5,13 +5,15 @@ class BlogModel {
   String? blogger;
   String? date;
   String? imageUrl;
+  String? id;
 
   BlogModel({
-    required this.title,
-    required this.description,
-    required this.blogger,
-    required this.date,
-    required this.imageUrl,
+    this.title,
+    this.description,
+    this.blogger,
+    this.date,
+    this.imageUrl,
+    this.id,
   });
 
   BlogModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class BlogModel {
     blogger = json['blogger'];
     date = json['date'];
     imageUrl = json['imageUrl'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -29,6 +32,7 @@ class BlogModel {
     data['blogger'] = this.blogger;
     data['date'] = this.date;
     data['imageUrl'] = this.imageUrl;
+    data['id'] = this.id;
     return data;
   }
 }
