@@ -33,10 +33,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
   void _datePicker() async {
     picked = await showDatePicker(
         context: context,
-        initialDate: blogController.blogg.date!.isEmpty
-            ? DateTime.now()
-            : DateTime.parse(blogController.blogg.date!),
-        // initialDate: DateTime.now(),
+        initialDate: DateTime.now(),
         initialEntryMode: DatePickerEntryMode.calendarOnly,
         firstDate: DateTime(1900),
         lastDate: DateTime.now(),
@@ -86,6 +83,59 @@ class _AddBlogPageState extends State<AddBlogPage> {
 
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (ctx) {
+                  return AlertDialog(
+                    content: Container(
+                      height: deviceHeight * 0.2,
+                      width: deviceWidth * 0.6,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("Edit Page , on-back Dialog box"),
+                          Text('Do you really want to exit ?'),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  alignment: Alignment.center,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  backgroundColor: Colors.green,
+                                  foregroundColor: Colors.white),
+                              child: Text('Keep Adding New Blog')),
+                          SizedBox(
+                            height: 4,
+                          ),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(ctx);
+                                context
+                                    .goNamed(MyAppRouteConstants.homeRouteName);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  alignment: Alignment.center,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8)),
+                                  backgroundColor: Colors.grey.shade800,
+                                  foregroundColor: Colors.white),
+                              child: Text('Yes, Discard')),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            icon: Icon(Icons.chevron_left),
+          ),
           title: ElevatedButton(
             onPressed: () {
               // blogController.ctxr = ctx as Rx<Rx<BuildContext?>>;
@@ -109,26 +159,30 @@ class _AddBlogPageState extends State<AddBlogPage> {
                       ? Stack(
                           alignment: Alignment.center,
                           children: [
-                            Container(
-                              height: deviceHeight * 0.25,
-                              width: deviceHeight * 0.25,
-                              decoration: BoxDecoration(
-                                  color: Colors.lightGreenAccent,
-                                  border: Border.all(
-                                      color: Colors.black,
-                                      width: 0.5,
-                                      strokeAlign: CircularProgressIndicator
-                                          .strokeAlignCenter)),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                        height: 80,
-                                        width: 80,
-                                        child: CachedNetworkImage(imageUrl: '${blogController.imgUrls}',fit: BoxFit.fitHeight,placeholder: (context, url) => CircularProgressIndicator(),)
-                                    ),
-                                  ],
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Container(
+                                height: deviceHeight * 0.25,
+                                width: deviceHeight * 0.25,
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                ),
+                                child: Center(
+                                  child: CachedNetworkImage(
+                                    imageUrl: '${blogController.imgUrls}',
+                                      fit: BoxFit.cover,
+                                      height: deviceHeight * 0.25,
+                                      width: deviceHeight * 0.25,
+                                      alignment: Alignment.center,
+                                      placeholder: (context, url) => const Center(
+                                        child:
+                                          CircularProgressIndicator(
+                                            color: Colors.blue,
+                                            strokeCap: StrokeCap.round,
+                                            strokeWidth: 5,
+                                          )
+                                      ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -422,7 +476,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                             ),
                             fillColor: Colors.transparent,
                             filled: true,
-                            hintText: blogController.blogg.date!,
+                            hintText: 'YYYY-MM-DD',
                             hintStyle: TextStyle(
                               color: Colors.grey.withOpacity(0.8),
                             ),
@@ -479,7 +533,16 @@ class _AddBlogPageState extends State<AddBlogPage> {
                                                         SizedBox(
                                                             height: 80,
                                                             width: 80,
-                                                            child: CachedNetworkImage(imageUrl: '${blogController.imgUrls}',fit: BoxFit.fitHeight,placeholder: (context, url) => CircularProgressIndicator(),))
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl:
+                                                                  '${blogController.imgUrls}',
+                                                              fit: BoxFit
+                                                                  .fitHeight,
+                                                              placeholder: (context,
+                                                                      url) =>
+                                                                  CircularProgressIndicator(),
+                                                            ))
                                                       ],
                                                     ),
                                                   ),

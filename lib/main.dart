@@ -8,6 +8,7 @@ import 'package:blogapp/firebase_options.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   setPathUrlStrategy();
   debugPrint('setpathurlstrategy : ok');
   WidgetsFlutterBinding.ensureInitialized();

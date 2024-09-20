@@ -24,7 +24,8 @@ class BlogRepository extends GetxController { //Todo : Make the name with Contro
         .catchError((error, stackTrace) {
       debugPrint('error inside : ${error.toString()}');
       // debugPrint('error outside : ${error.toString()}');
-      return error.toString();
+      return error;
+      // return error.toString();
     });
   }
 
@@ -198,6 +199,93 @@ class BlogRepository extends GetxController { //Todo : Make the name with Contro
     } finally {
       isUploading.value = false;
     }
+  }
+
+  Future<void> updateImage(String id) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image == null) {
+      debugPrint('select image first');
+      return;
+    }
+
+    try {
+      isUploading.value = true;
+      // For web platform
+      if (kIsWeb) {
+        final fileBytes = await image.readAsBytes();
+        String filePath = 'uploaded_images/${DateTime.now().toIso8601String()}.jpg';
+
+        await firebaseStorage.ref(filePath).putData(fileBytes,SettableMetadata(contentType: 'image/jpeg'));
+
+        String downloadUrl = await firebaseStorage.ref(filePath).getDownloadURL();
+        // imgUrls.value = downloadUrl;
+        blogg.imageUrl = downloadUrl;
+        debugPrint('uploaded from if(kWeb) ${_db.collection('blogs').doc('${blogg.id}').get()}');
+      }
+      // For mobile and desktop platforms
+      else {
+        File file = File(image.path);
+        String filePath = 'uploaded_images/${DateTime.now()}.jpg';
+
+        await firebaseStorage.ref(filePath).putFile(file);
+
+        String downloadUrl = await firebaseStorage.ref(filePath).getDownloadURL();
+        imgUrls.value = downloadUrl;
+        debugPrint('else part..');
+      }
+      // uri = Uri.parse('${imgUrls}');
+      // bytes = Uint8List(uri as int);
+    } catch (e) {
+      print("Error in update : $e");
+    } finally {
+      isUploading.value = false;
+    }
+    update();
+  }
+
+  Future<void> updateDoc(String id,String title,String description,String blogger,String date,String imgUrl) async {
+    blogg.title=title;
+    blogg.description=description;
+    blogg.blogger=blogger;
+    blogg.date=date;
+    blogg.imageUrl=imgUrl;
+    try {
+      if (kIsWeb) {
+         _db.collection('blogs').doc(id).update(
+            {
+              // 'title':'updated titlee',
+              'title':'${blogg.title}',
+              'description':'${blogg.description}',
+              'blogger':'${blogg.blogger}',
+              'date':'${blogg.date}',
+              'imageUrl':'${blogg.imageUrl}'
+            }
+        ).then((value) {
+          // debugPrint("${}");
+        },);
+        debugPrint('doc "${blogg.id}:(${blogg.title})" data uploaded from if(kWeb)}');
+      }
+      // For mobile and desktop platforms
+      else {
+        // File file = File(image.path);
+        // String filePath = 'uploaded_images/${DateTime.now()}.jpg';
+        //
+        // await firebaseStorage.ref(filePath).putFile(file);
+        //
+        // String downloadUrl = await firebaseStorage.ref(filePath).getDownloadURL();
+        // imgUrls.value = downloadUrl;
+        debugPrint('else part..');
+      }
+      // uri = Uri.parse('${imgUrls}');
+      // bytes = Uint8List(uri as int);
+    } catch (e) {
+      print("Error in update : $e");
+    } finally {
+      isUploading.value = false;
+    }
+    update();
   }
 
 }

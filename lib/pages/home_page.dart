@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
       Duration(seconds: 2),
       () {
         // context.goNamed(MyAppRouteConstants.splashScreenRouteName);
-        reassemble();
         debugPrint('refreshed content');
       },
     );
@@ -51,8 +50,20 @@ class _HomePageState extends State<HomePage> {
     final deviceWidth = MediaQuery.of(context).size.width;
     final deviceHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: <Color>[
+                  Colors.black, Colors.transparent
+                ]
+            ),
+          ),
+        ),
         title: const Text(
           'home page',
           style: TextStyle(color: Colors.white),
@@ -76,7 +87,10 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-          child: SizedBox(
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('images/bali.jpg'),alignment: Alignment.center,fit: BoxFit.cover),
+            ),
         child: RefreshIndicator(
             onRefresh: _refresh,
             child: Obx(
@@ -104,8 +118,64 @@ class _HomePageState extends State<HomePage> {
                               // // blogController.dataList[index];
                               // // blogController.indexx = index.toString();
                               // blogController.fetchParticularDocData("${blogController.dataList[index].id}");
-                              context.goNamed(
-                                  MyAppRouteConstants.editBlogRouteName,pathParameters: {'id':'${blogController.dataList[index].id}'});
+                              showDialog(context: context,
+                                  builder: (ctx){
+                                return Obx((){
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8)),
+                                      alignment: Alignment.center,
+                                      content: Container(
+                                        width: deviceWidth*0.6,
+                                        height: deviceHeight*0.2,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Text('do you really want to edit the blog "${blogController.dataList[index].title}"?'),
+                                            SizedBox(
+                                              height: 25,
+                                              width: 100,
+                                              child: ElevatedButton(
+                                                  onPressed: (){
+                                                    Navigator.pop(ctx);
+                                                    context.pushNamed(
+                                                        MyAppRouteConstants.editBlogRouteName,pathParameters: {'id':'${blogController.dataList[index].id}'});
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                      padding: EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                                                      backgroundColor: Colors.amberAccent,
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      foregroundColor: Colors.white
+                                                  ),
+                                                  child: Text('Update')
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            SizedBox(
+                                              width: 100,
+                                              height: 25,
+                                              child: ElevatedButton(
+                                                  onPressed: (){
+                                                    Navigator.pop(ctx);
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 0,vertical: 0),
+                                                      backgroundColor: Colors.redAccent,
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                                      foregroundColor: Colors.white
+                                                  ),
+                                                  child: Text('cancel')
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                                },
+                              );
                             },
                             onLongPress: () {
                               debugPrint(
@@ -130,7 +200,8 @@ class _HomePageState extends State<HomePage> {
                                   child: CachedNetworkImage(
                                     imageUrl:
                                     '${blogController.dataList[index].imageUrl}',
-                                    fit: BoxFit.fitWidth,
+                                    fit: BoxFit.cover,
+                                    alignment: Alignment.center,
                                     // placeholder: (context, url) =>
                                     //     const Center(child: CircularProgressIndicator(color: Colors.blue,strokeCap: StrokeCap.round,strokeWidth: 8,)),
                                     errorWidget: (context, url, error) =>
@@ -146,7 +217,7 @@ class _HomePageState extends State<HomePage> {
                                       : deviceHeight > 480
                                       ? 300
                                       : 200,
-                                  // width: MediaQuery.of(context).size.width*0.8,
+                                  width: MediaQuery.of(context).size.width * 0.95,
                                   // padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: Colors.black.withOpacity(0.4),
@@ -206,7 +277,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(16.0),
         child: FloatingActionButton(
           onPressed: () {
-            context.goNamed(MyAppRouteConstants.addBlogRouteName);
+            context.pushNamed(MyAppRouteConstants.addBlogRouteName);
           },
           elevation: 2,
           backgroundColor: Colors.cyan,
