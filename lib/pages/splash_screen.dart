@@ -27,17 +27,35 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         height: double.maxFinite,
         width: double.maxFinite,
-        color: const Color(0xff353434),
-        child: const Center(
-          child: Text(
-            'FILMFLIX',
-            style: TextStyle(
-                fontFamily: 'roboto',
-                color: Color(0xffE50914),
-                letterSpacing: 8,
-                fontWeight: FontWeight.bold,
-                fontSize: 22),
+        color: const Color(0xffDCDCD7),
+        child: Center(
+          child: ShaderMask(
+            shaderCallback: (bounds) => const LinearGradient(colors: [
+              Color(0xff061618),
+              Color(0xff07171B),
+              Color(0xff3B4A32),
+              Color(0xff976F37),
+              Color(0xffDCDCD7)
+            ]).createShader(bounds),
+            child: const Text(
+              'B L O G A P P',
+              style: TextStyle(
+                  fontFamily: 'chiro',
+                  color: Colors.white,
+                  letterSpacing: 4,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 60),
+            ),
           ),
+          // child: Text(
+          //   'B L O G A P P',
+          //   style: TextStyle(
+          //       fontFamily: 'roboto',
+          //       color: Color(0xffE50914),
+          //       letterSpacing: 8,
+          //       fontWeight: FontWeight.bold,
+          //       fontSize: 22),
+          // ),
         ),
       ),
     );

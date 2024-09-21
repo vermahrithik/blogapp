@@ -191,6 +191,22 @@ class _HomePageState extends State<HomePage> {
                                       : deviceHeight > 480
                                       ? 300
                                       : 200,
+                                  width: MediaQuery.of(context).size.width * 0.95,
+                                  // padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.8),
+                                    // backgroundBlendMode: BlendMode.color
+                                  ),
+                                ),
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  height: deviceHeight > 780
+                                      ? 400
+                                      : deviceHeight > 480
+                                      ? 300
+                                      : 200,
                                   width:
                                   MediaQuery.of(context).size.width * 0.95,
                                   decoration: const BoxDecoration(

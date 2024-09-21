@@ -1000,7 +1000,7 @@ class _AddBlogPageState extends State<AddBlogPage> {
                     width: deviceWidth * 0.55,
                     child: ElevatedButton(
                       onPressed: () {
-                        blogController.getAllBlogs();
+                        blogController.fetchData();
                         // addBlog(titleController.text, descriptionController.text, bloggerController.text, dateController.text);
                       },
                       style: ElevatedButton.styleFrom(

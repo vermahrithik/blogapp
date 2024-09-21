@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:blogapp/model/blog_model.dart';
+import 'package:blogapp/utils/firebase_exceptions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +18,22 @@ class BlogRepository extends GetxController { //Todo : Make the name with Contro
 
   // adding blog to collection :
   createBlog(BlogModel blog) async {
-    await _db
-        .collection('blogs')
-        .add(blog.toJson())
-        .whenComplete(() => debugPrint('success'))
-        .catchError((error, stackTrace) {
-      debugPrint('error inside : ${error.toString()}');
-      // debugPrint('error outside : ${error.toString()}');
-      return error;
-      // return error.toString();
-    });
+    try{
+      await _db
+          .collection('blogs')
+          .add(blog.toJson())
+          .whenComplete(() => debugPrint('success'))
+          .catchError((error, stackTrace) {
+        debugPrint('error inside : ${error.toString()}');
+        // debugPrint('error outside : ${error.toString()}');
+        return error;
+        // return error.toString();
+      });
+    }on FirebaseException catch(e){
+      debugPrint(FirebaseExceptionHandler.handleException(e.code));
+    }catch (e){
+      debugPrint('Error fetching data: $e');
+    }
   }
 
   // fetching blogs from collection :
@@ -66,19 +73,20 @@ class BlogRepository extends GetxController { //Todo : Make the name with Contro
           return blog;
         }).toList();
         dataList.value = blogs;
-        print('Blogs fetched successfully');
+        debugPrint('Blogs fetched successfully');
         debugPrint('${snapshot.docs.map((e)=>e)}');
       }else{
         debugPrint('connect again when network is available!!');
       }
     } on FirebaseException catch (e) {
-      if (e.code == 'unavailable') {
-        print('Error: Firebase service is unavailable.');
-      } else if (e.code == 'permission-denied') {
-        print('Error: Permission denied.');
-      } else {
-        print('Error: ${e.message}');
-      }
+      debugPrint(FirebaseExceptionHandler.handleException(e.code));
+      // if (e.code == 'unavailable') {
+      //   print('Error: Firebase service is unavailable.');
+      // } else if (e.code == 'permission-denied') {
+      //   print('Error: Permission denied.');
+      // } else {
+      //   print('Error: ${e.message}');
+      // }
     } catch (e) {
       print('Error fetching data: $e');
     }
@@ -107,19 +115,20 @@ class BlogRepository extends GetxController { //Todo : Make the name with Contro
         debugPrint('doc id not found');
         return false;
       }
-
-    } on FirebaseException catch (e) {
-      if (e.code == 'unavailable') {
-        print('Error: Firebase service is unavailable.');
-        return false;
-      } else if (e.code == 'permission-denied') {
-        print('Error: Permission denied.');
-        return false;
-      } else {
-        print('Error: ${e.message}');
-        return false;
-      }
-    } catch (e) {
+    }on FirebaseException catch(e){
+      // if (e.code == 'unavailable') {
+      //   print('Error: Firebase service is unavailable.');
+      //   return false;
+      // } else if (e.code == 'permission-denied') {
+      //   print('Error: Permission denied.');
+      //   return false;
+      // } else {
+      //   print('Error: ${e.message}');
+      //   return false;
+      // }
+      debugPrint(FirebaseExceptionHandler.handleException(e.code));
+      return false;
+    }catch (e){
       print('Error fetching data: $e');
       return false;
     }
