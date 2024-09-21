@@ -198,20 +198,33 @@ class EditBlogPageState extends State<EditBlogPage> {
                                     color: Colors.transparent,
                                   ),
                                   child: Center(
-                                    child: CachedNetworkImage(
-                                      imageUrl:
-                                          '${blogController.blogg.imageUrl}',
-                                      fit: BoxFit.cover,
-                                      height: deviceHeight * 0.25,
-                                      width: deviceHeight * 0.25,
-                                      alignment: Alignment.center,
-                                      placeholder: (context, url) => const Center(
-                                          child:
-                                              CircularProgressIndicator(
-                                        color: Colors.blue,
-                                        strokeCap: StrokeCap.round,
-                                        strokeWidth: 5,
-                                      )),
+                                    child: InteractiveViewer(
+                                      scaleEnabled: true,
+                                      // trackpadScrollCausesScale: true,
+                                      onInteractionUpdate: (details) {
+                                        details.scale.toPrecision(1);
+                                      },
+                                      maxScale: 5.0,
+                                      minScale: 1,
+                                      interactionEndFrictionCoefficient: 0.1,
+                                      // alignment: Alignment.center,
+                                      // onInteractionEnd: (details) {},
+                                      // boundaryMargin: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            '${blogController.blogg.imageUrl}',
+                                        fit: BoxFit.cover,
+                                        height: deviceHeight * 0.25,
+                                        width: deviceHeight * 0.25,
+                                        alignment: Alignment.center,
+                                        placeholder: (context, url) => const Center(
+                                            child:
+                                                CircularProgressIndicator(
+                                          color: Colors.blue,
+                                          strokeCap: StrokeCap.round,
+                                          strokeWidth: 5,
+                                        )),
+                                      ),
                                     ),
                                   ),
                                 ),

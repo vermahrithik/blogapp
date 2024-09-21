@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:blogapp/utils/firebase_exceptions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:blogapp/routing/app_route_constants.dart';
 import 'package:blogapp/pages/signup_page.dart';
@@ -22,15 +24,26 @@ class _LoginPageState extends State<LoginPage> {
   bool _obscureText = true;
 
   Future signIn() async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text.trim(),
-      password: passwordController.text.trim()).then((value) {
-        if(value.user?.uid!=null){
-          SharedPreferences.getInstance().then((value) => value.setBool('isLoggedIn', true),);
-          context.goNamed(MyAppRouteConstants.homeRouteName);
-        }
-      },);
-
+    try{
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text.trim(),
+              password: passwordController.text.trim())
+          .then(
+        (value) {
+          if (value.user?.uid != null) {
+            SharedPreferences.getInstance().then(
+              (value) => value.setBool('isLoggedIn', true),
+            );
+            context.goNamed(MyAppRouteConstants.homeRouteName);
+          }
+        },
+      );
+    }on FirebaseAuthException catch (e){
+      debugPrint(FirebaseExceptionHandler.handleException(e.code));
+    }finally {
+      debugPrint('\ndue to some issue user isnt able to login,\ntry again later!!');
+    }
   }
 
   // Future<UserCredential?> signInWithGoogle() async{
@@ -94,15 +107,24 @@ class _LoginPageState extends State<LoginPage> {
 
     return WillPopScope(
         child: Scaffold(
-          backgroundColor: const Color(0xff353434),
+          backgroundColor: Color(0xff9C9C9C),
           appBar: AppBar(
-            title: const Text(
-              'FILMFLIX',
-              style: TextStyle(
-                  letterSpacing: 8,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: Color(0xffE50914)
+            title: ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(colors: [
+                Color(0xff061618),
+                Color(0xff07171B),
+                Color(0xff3B4A32),
+                Color(0xff976F37),
+                Color(0xffDCDCD7)
+              ]).createShader(bounds),
+              child: const Text(
+                'B L O G A P P',
+                style: TextStyle(
+                    fontFamily: 'chiro',
+                    color: Colors.white,
+                    letterSpacing: 4,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22),
               ),
             ),
             centerTitle: true,
@@ -206,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.grey.shade700, width: 1),
+                                      color: Color(0xfff2f2f3), width: 1),
                                 ),
                                 border: const UnderlineInputBorder(
                                   borderSide:
@@ -297,6 +319,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             signIn();
+                            // Get.snackbar('login', 'done',backgroundColor: Colors.redAccent);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xfff2f2f3),

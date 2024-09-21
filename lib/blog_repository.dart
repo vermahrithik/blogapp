@@ -73,7 +73,7 @@ class BlogRepository extends GetxController { //Todo : Make the name with Contro
           return blog;
         }).toList();
         dataList.value = blogs;
-        debugPrint('Blogs fetched successfully');
+      debugPrint('Blogs fetched successfully');
         debugPrint('${snapshot.docs.map((e)=>e)}');
       }else{
         debugPrint('connect again when network is available!!');
