@@ -214,15 +214,15 @@ class _LoginPageState extends State<LoginPage> {
                               controller: emailController,
                               cursorColor: const Color(0xfff2f2f3),
                               keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Email ID',
-                                hintStyle: const TextStyle(
+                                hintStyle: TextStyle(
                                     color: Color(0xfff2f2f3),
                                     fontWeight: FontWeight.w300),
                                 labelStyle:
-                                const TextStyle(color: Color(0xfff2f2f3)),
+                                TextStyle(color: Color(0xfff2f2f3)),
                                 enabled: true,
-                                enabledBorder: const UnderlineInputBorder(
+                                enabledBorder: UnderlineInputBorder(
                                   borderSide:
                                   BorderSide(color: Color(0xfff2f2f3), width: 1),
                                 ),
@@ -230,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                                   borderSide: BorderSide(
                                       color: Color(0xfff2f2f3), width: 1),
                                 ),
-                                border: const UnderlineInputBorder(
+                                border: UnderlineInputBorder(
                                   borderSide:
                                   BorderSide(color: Color(0xfff2f2f3), width: 1),
                                 ),

@@ -5,7 +5,7 @@ class MyAppRouteConstants{
   static const String loginRouteName = 'login';
   static const String signUpRouteName = 'signup';
   static const String mainRouteName = 'main';
-static const String addBlogRouteName = 'addBlog';
+  static const String addBlogRouteName = 'addBlog';
   static const String editBlogRouteName = 'edit/';
   static const String detailsRouteName = 'details';
   static const String phoneRouteName = 'loginwithphone';
